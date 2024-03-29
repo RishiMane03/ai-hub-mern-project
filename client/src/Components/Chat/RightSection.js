@@ -117,7 +117,7 @@ const RightSection = () => {
 
   const logoutFun = async () => {
     try {
-      const response = await axios.get(`${BackendURL}/logout`);
+      const response = await axios.get(`${window.location.origin}/logout`);
       console.log(response.data);
       if(response.data.logout){
         navigate('/login')
@@ -149,7 +149,7 @@ const RightSection = () => {
       return null;
     }
 
-    const openAiAPI = process.env.REACT_APP_API_KEY
+    const openaiApiKey = process.env.OPENAI_API_KEY
 
     const sendMessage = async () => {
 
@@ -165,8 +165,7 @@ const RightSection = () => {
         let url = "https://api.openai.com/v1/chat/completions"
 
         // let token;
-        let token = `Bearer ${openAiAPI}`
-        // let token = `Bearer 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`
+        let token = `Bearer ${openaiApiKey}`
         let model = 'gpt-3.5-turbo'
 
         // adding old msg to new msg list
@@ -221,7 +220,7 @@ const RightSection = () => {
             }
             // console.log('userIdToken > ',userIdToken);
 
-            await axios.post(`${BackendURL}/saveChat`, { allMessages, userIdToken: userIdToken });
+            await axios.post(`${window.location.origin}/saveChat`, { allMessages, userIdToken: userIdToken });
             console.log('Chat saved to MongoDB');
             if(allMessages.length > 0){
               toast.success('Memories created!')
@@ -239,7 +238,7 @@ const RightSection = () => {
 
     const handlePreviousChat = async () => {
         try {
-            const response = await axios.get(`${BackendURL}/getAllChats`);
+            const response = await axios.get(`${window.location.origin}/getAllChats`);
             setAllMessages(response.data);
             console.log(response.data);
             return toast.success('Memories restored!')
