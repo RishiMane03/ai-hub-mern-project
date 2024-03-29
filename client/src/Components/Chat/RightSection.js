@@ -149,7 +149,7 @@ const RightSection = () => {
       return null;
     }
 
-    const openAiAPI = process.env.REACT_APP_API_KEY
+    // const openAiAPI = process.env.REACT_APP_API_KEY
 
     const sendMessage = async () => {
 
@@ -161,9 +161,10 @@ const RightSection = () => {
         }
 
         setIsLoader(true)
+        // console.log(message)
         let url = "https://api.openai.com/v1/chat/completions"
 
-        let token = `Bearer ${openAiAPI}`
+        let token = `Bearer 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`
         let model = 'gpt-3.5-turbo'
 
         // adding old msg to new msg list
