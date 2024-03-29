@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors')
+const path = require("path")
 const bodyParser = require('body-parser');
 require("dotenv").config();
 const clc = require("cli-color");
@@ -37,7 +38,7 @@ const PORT = process.env.PORT || 7000;
 
 // Middleware
 app.use(cors({
-    origin : [`http://localhost:3000`],
+    origin : [`${process.env.BACKEND_URL}`],
     credentials : true
 }))
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -54,9 +55,14 @@ mongoose.connect(process.env.URI)
 
 
 
-app.get('/', function (req, res) {
-  res.send('Welcome to the world of ai')
-})
+// app.get('/', function (req, res) {
+//   res.send('Welcome to the world of ai')
+// })
+app.get("/", (req, res) => {
+    app.use(express.static(path.resolve(__dirname, "client", "build")));
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+});
+    
 
 app.post('/register', async(req, res)=>{
     // console.log('req.body is >> ',req.body);
@@ -127,8 +133,7 @@ app.post('/signIn', async (req, res) => {
 
     // find user in database
     try {
-         
-        let userDb = await userModel.findOne({ username: name });
+         let userDb = await userModel.findOne({ username: name });
 
         console.log('userDb > ',userDb);
         // no user found
@@ -190,7 +195,7 @@ app.get('/logout', (req, res) => {
 });
 
 // DashBoard
-app.get('/dashboards', async (req, res) => {
+app.get('/dashboards', isAuth, async (req, res) => {
     console.log('dashboard api started')
     res.send({
         tokenVerify : true
