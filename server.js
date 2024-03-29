@@ -46,6 +46,11 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true })); //this is used for form data
 app.use(express.json()); // this is used for hitting req from anywhere like postman and converting client data to json
 app.use(cookieParser());
+app.use((req, res, next) => {
+    res.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline';");
+    next();
+});
+  
 
 
 // Databse Connection
